@@ -32,11 +32,11 @@ class Biblioteca:
             livro.exibir_informacoes()
 
 
-autor1 = Autor("J.K. Rowling")
-autor2 = Autor("J.R.R. Tolkien")
+autor1 = Autor("Robert Greene")
+autor2 = Autor("Adam Smith")
 
 biblioteca = Biblioteca()
-biblioteca.adicionar_livro("Harry Potter", autor1)
-biblioteca.adicionar_livro("O Senhor dos Anéis", autor2)
+biblioteca.adicionar_livro("As 48 Leis do Poder", autor1)
+biblioteca.adicionar_livro("A Riqueza das Nações", autor2)
 
 biblioteca.exibir_livros()
