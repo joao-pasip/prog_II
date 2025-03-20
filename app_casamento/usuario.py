@@ -58,7 +58,7 @@ class Noivo(Usuario):
         tarefas (list): Lista de tarefas do casamento
     """
 
-    def __init__(self, nome, email, senha):
+    def __init__(self, nome, email, senha, is_noivo=True):
         """
         Inicializa um novo noivo.
 
@@ -67,7 +67,7 @@ class Noivo(Usuario):
             email (str): Email do noivo
             senha (str): Senha do noivo
         """
-        super().__init__(nome, email, senha)
+        super().__init__(nome, email, senha, is_noivo)
         self.lista_convidados = []
         self.tarefas = []
 

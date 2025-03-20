@@ -1,190 +1,148 @@
-# from usuario import Convidado
-# from casamento import Casamento
-# from tarefa import Tarefa
-# from presente import Presente
-
-
-# def menu_interativo():
-#     casamento = Casamento("12/12/2025", "Praia de Copacabana")
-#     while True:
-#         print("\nMenu do App de Casamento")
-#         print("1 - Adicionar Convidado")
-#         print("2 - Adicionar Tarefa")
-#         print("3 - Adicionar Presente")
-#         print("4 - Exibir Detalhes do Casamento")
-#         print("5 - Listar Presentes")
-#         print("6 - Sair")
-#         opcao = input("Escolha uma opção: ")
-
-#         if opcao == "1":
-#             nome = input("Nome do Convidado: ")
-#             email = input("Email do Convidado: ")
-#             senha = input("Senha do Convidado: ")
-#             convidado = Convidado(nome, email, senha)
-#             casamento.adicionar_convidado(convidado)
-#             print("Convidado adicionado!")
-
-#         elif opcao == "2":
-#             descricao = input("Descrição da Tarefa: ")
-#             responsavel = input("Responsável: ")
-#             tarefa = Tarefa(descricao, responsavel)
-#             casamento.adicionar_tarefa(tarefa)
-#             print("Tarefa adicionada!")
-
-#         elif opcao == "3":
-#             descricao = input("Descrição do Presente: ")
-#             loja = input("Loja: ")
-#             preco = input("Preço (R$): ")
-#             try:
-#                 presente = Presente(descricao, loja, float(preco))
-#                 casamento.adicionar_presente(presente)
-#                 print("Presente adicionado à lista!")
-#             except ValueError:
-#                 print("Erro: O preço deve ser um número válido.")
-
-#         elif opcao == "4":
-#             print(casamento.exibir_detalhes())
-
-#         elif opcao == "5":
-#             print("\nLista de Presentes:")
-#             for presente in casamento.listar_presentes():
-#                 print(
-#                     f"""
-#                     - {presente.descricao} (Loja: {presente.loja})
-#                     - R$ {presente.preco:.2f}"""
-#                 )
-
-#         elif opcao == "6":
-#             print("Saindo...")
-#             break
-
-#         else:
-#             print("Opção inválida! Tente novamente.")
-
-
-# # Executar menu interativo
-# menu_interativo()
-
-from usuario import Convidado
-from casamento import Casamento
+from sistema_casamento import SistemaCasamento
+from usuario import Usuario
 from tarefa import Tarefa
 from presente import Presente
 
+# Inicializa o sistema de casamento
+sistema = SistemaCasamento()
 
-def menu_interativo():
-    """
-    Interface interativa para gerenciar um casamento.
+# Loop principal
+while True:
+    try:
+        # Exibe o menu de acordo com o estado de login
+        sistema.mostrar_menu()
 
-    Permite adicionar convidados, tarefas e presentes, além de visualizar
-    informações do casamento.
-    """
-    casamento = Casamento("12/12/2025", "Praia de Copacabana")
+        opcao = input("Escolha uma opção: ")
 
-    while True:
-        print("\n=== SISTEMA DE GERENCIAMENTO DE CASAMENTO ===")
-        print("1 - Adicionar Convidado")
-        print("2 - Adicionar Tarefa")
-        print("3 - Adicionar Presente")
-        print("4 - Exibir Detalhes do Casamento")
-        print("5 - Listar Presentes")
-        print("6 - Listar Convidados")
-        print("7 - Listar Tarefas")
-        print("8 - Sair")
-
-        try:
-            opcao = input("\nEscolha uma opção: ").strip()
-
+        # Se o usuário não estiver logado, o menu de login aparece
+        if not sistema.usuario_atual:
             if opcao == "1":
-                nome = input("Nome do Convidado: ").strip()
-                email = input("Email do Convidado: ").strip()
-                senha = input("Senha do Convidado: ").strip()
-
-                if not nome or not email or not senha:
-                    print("Erro: Todos os campos são obrigatórios!")
-                    continue
-
-                convidado = Convidado(nome, email, senha)
-                casamento.adicionar_convidado(convidado)
-                print("Convidado adicionado com sucesso!")
-
+                email = input("Email: ")
+                senha = input("Senha: ")
+                if sistema.login(email, senha):
+                    print("Login realizado com sucesso!")
+                else:
+                    print("Email ou senha incorretos.")
             elif opcao == "2":
-                descricao = input("Descrição da Tarefa: ").strip()
-                responsavel = input("Responsável: ").strip()
-
-                if not descricao or not responsavel:
-                    print("Erro: Descrição e responsável são obrigatórios!")
-                    continue
-
-                tarefa = Tarefa(descricao, responsavel)
-                casamento.adicionar_tarefa(tarefa)
-                print("Tarefa adicionada com sucesso!")
-
-            elif opcao == "3":
-                descricao = input("Descrição do Presente: ").strip()
-                loja = input("Loja: ").strip()
-                try:
-                    preco = float(input("Preço (R$): ").strip())
-
-                    if preco <= 0:
-                        print("Erro: O preço deve ser maior que zero!")
-                        continue
-
-                    presente = Presente(descricao, loja, preco)
-                    casamento.adicionar_presente(presente)
-                    print("Presente adicionado à lista!")
-
-                except ValueError:
-                    print("Erro: O preço deve ser um número válido.")
-
-            elif opcao == "4":
-                print("\n=== DETALHES DO CASAMENTO ===")
-                print(casamento.exibir_detalhes())
-
-            elif opcao == "5":
-                print("\n=== LISTA DE PRESENTES ===")
-                if not casamento.listar_presentes():
-                    print("Nenhum presente cadastrado ainda.")
-                else:
-                    for presente in casamento.listar_presentes():
-                        print(
-                            f"""
-- {presente.descricao} (Loja: {presente.loja})
-  R$ {presente.preco:.2f}"""
-                        )
-
-            elif opcao == "6":
-                print("\n=== LISTA DE CONVIDADOS ===")
-                if not casamento.lista_convidados:
-                    print("Nenhum convidado cadastrado ainda.")
-                else:
-                    for convidado in casamento.lista_convidados:
-                        print(f"- {convidado._nome} ({convidado._email})")
-
-            elif opcao == "7":
-                print("\n=== LISTA DE TAREFAS ===")
-                if not casamento.tarefas:
-                    print("Nenhuma tarefa cadastrada ainda.")
-                else:
-                    for tarefa in casamento.tarefas:
-                        print(
-                            f"""- {tarefa.descricao}
-                            (Responsável: {tarefa.responsavel})"""
-                        )
-
-            elif opcao == "8":
-                print("\nSaindo do sistema...")
+                print("Saindo do sistema...")
                 break
-
             else:
-                print("Opção inválida! Tente novamente.")
+                print("Opção inválida. Tente novamente.")
 
-        except KeyboardInterrupt:
-            print("\nOperação cancelada pelo usuário.")
-            continue
-        except Exception as e:
-            print(f"\nErro inesperado: {str(e)}")
-            continue
+        else:
+            # Se o usuário estiver logado, o menu adequado será exibido
+            if sistema.verificar_permissao_noivo():
+                # Menu de noivo
+                if opcao == "1":
+                    data = input("Data do casamento (DD/MM/AAAA): ")
+                    local = input("Local do casamento: ")
+                    sistema.criar_casamento(data, local)
+                    print("Casamento criado com sucesso!")
+                elif opcao == "2":
+                    nome = input("Nome do convidado: ")
+                    email = input("Email do convidado: ")
+                    senha = input("Senha do convidado: ")
+                    convidado = Usuario(nome, email, senha, False)
+                    sistema.adicionar_convidado(convidado)
+                    print(f"Convidado {nome} adicionado com sucesso!")
+                elif opcao == "3":
+                    descricao_tarefa = input("Descrição da tarefa: ")
+                    responsavel = input("Responsável pela tarefa: ")
+                    tarefa = Tarefa(descricao_tarefa, responsavel)
+                    sistema.adicionar_tarefa(tarefa)
+                    print(f"Tarefa {descricao_tarefa} adicionada com sucesso!")
+                elif opcao == "4":
+                    descricao_presente = input("Descrição do presente: ")
+                    loja = input("Loja onde foi comprado: ")
+                    preco = input("Preço do presente: ")
+                    presente = Presente(descricao_presente, loja, preco)
+                    sistema.adicionar_presente(presente)
+                    print(f"Presente {descricao_presente} adicionado com sucesso!")
+                elif opcao == "5":
+                    if sistema.casamento:
+                        for convidado in sistema.casamento.lista_convidados:
+                            print(convidado.exibir_dados())
+                    else:
+                        print(
+                            "Você precisa criar um casamento antes de adicionar convidados."
+                        )
+                elif opcao == "6":
+                    if sistema.casamento:
+                        for tarefa in sistema.casamento.tarefas:
+                            print(f"{tarefa.descricao} - {tarefa.status}")
+                    else:
+                        print(
+                            "Você precisa criar um casamento antes de adicionar tarefas."
+                        )
+                elif opcao == "7":
+                    try:
+                        if sistema.casamento:
+                            for presente in sistema.casamento.lista_presentes:
+                                print(
+                                    f"{presente.descricao} - {presente.loja} - R${presente.preco}"
+                                )
+                        else:
+                            print(
+                                "Você precisa criar um casamento antes de adicionar presentes."
+                            )
+                    except AttributeError:
+                        print(
+                            "Erro: Não foi possível acessar a lista de presentes, pois o casamento não foi criado corretamente."
+                        )
+                elif opcao == "8":
+                    if sistema.casamento:
+                        print("\nLista de Tarefas:")
+                        for i, tarefa in enumerate(sistema.casamento.tarefas):
+                            print(f"{i + 1}. {tarefa.descricao} - {tarefa.status}")
 
+                        escolha = (
+                            int(
+                                input(
+                                    "\nEscolha o número da tarefa que deseja atualizar: "
+                                )
+                            )
+                            - 1
+                        )
 
-if __name__ == "__main__":
-    menu_interativo()
+                        if 0 <= escolha < len(sistema.casamento.tarefas):
+                            novo_status = input(
+                                "Novo status da tarefa (Pendente, Em andamento, Concluída): "
+                            )
+                            sistema.casamento.tarefas[escolha].status = novo_status
+                            print(
+                                f"Status da tarefa '{sistema.casamento.tarefas[escolha].descricao}' atualizado para '{novo_status}'."
+                            )
+                        else:
+                            print("Escolha inválida.")
+                    else:
+                        print(
+                            "Você precisa criar um casamento antes de modificar as tarefas."
+                        )
+                elif opcao == "9":
+                    print("Saindo do sistema...")
+                    break
+                else:
+                    print("Opção inválida. Tente novamente.")
+            else:
+                # Menu de convidado
+                if opcao == "1":
+                    try:
+                        if sistema.casamento:
+                            for presente in sistema.casamento.lista_presentes:
+                                print(
+                                    f"{presente.descricao} - {presente.loja} - R${presente.preco}"
+                                )
+                        else:
+                            print("O casamento ainda não foi criado.")
+                    except AttributeError:
+                        print(
+                            "Erro: Não foi possível acessar a lista de presentes, pois o casamento não foi criado corretamente."
+                        )
+                elif opcao == "2":
+                    print("Saindo do sistema...")
+                    break
+                else:
+                    print("Opção inválida. Tente novamente.")
+    except KeyboardInterrupt:
+        print("\nOperação cancelada pelo usuário. Encerrando programa...")
+        break  # Sai do loop e encerra o programa
